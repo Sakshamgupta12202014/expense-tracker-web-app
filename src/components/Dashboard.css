@@ -1,0 +1,42 @@
+/* Dashboard.css */
+
+.dashboard-container {
+  background: linear-gradient(to right, #2c3e50, #1abc9c);
+  padding: 1.5rem;
+  min-height: 100vh;
+}
+
+.dashboard-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.dashboard-nav-list {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.dashboard-user {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.logout-button {
+  background-color: #ffffff;
+  color: #2c3e50;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: 600;
+}
+
+.logout-button:hover {
+  background-color: #ecf0f1;
+}

@@ -7,8 +7,9 @@ function Expenses() {
   const [msg, setMsg] = useState("");
 
   const isLoggedIn = useSelector((state) => state.isAuthenticated);
-  // moorkh ho tum
 
+  // moorkh ho tum agar tum abhi bhi nhi samjhe ki usestate func ko call krna outside effect will cause infinite re renders of the expenses page 
+  
   //   if(isLoggedIn){
   //     setMsg("Hurray, access to premium content")
   //   }else{

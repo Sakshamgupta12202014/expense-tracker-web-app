@@ -9,9 +9,8 @@ function Header() {
     { name: "Home", path: "/" },
     { name: "Dashboard", path: "/dashboard" , isAuth: isAuthenticated },
     { name: "Expenses", path: "/expenses" },
-    { name: "Profile", path: "/profile" },
+    { name: "Profile", path: "/profile", isAuth: isAuthenticated },
     { name: "Login", path: "/login", isAuth: !isAuthenticated },
-    { name: "Logout", path: "/logout", isAuth: isAuthenticated },
     { name: "Sign Up", path: "/signup", isAuth: !isAuthenticated },
   ];
 

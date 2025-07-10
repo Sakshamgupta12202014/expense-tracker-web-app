@@ -13,16 +13,19 @@ import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
 import Expenses from "./components/Expenses.jsx";
+import Profile from "./components/Profile.jsx";
+import Dashboard from "./components/Dashboard.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/" element={<Home/>} />
       <Route path="expenses" element={<Expenses />} />
-      <Route path="profile" element={<h1>Profile Page</h1>} />
+      <Route path="profile" element={<Profile/>} />
       <Route path="login" element={<Login/>} />
       <Route path="logout" element={<h1>Logout Page</h1>} />
       <Route path="signup" element={<SignUp/>} />
+      <Route path="dashboard" element={<Dashboard />} />
       <Route path="*" element={<h1>404 Not Found</h1>} />
     </Route>
   )

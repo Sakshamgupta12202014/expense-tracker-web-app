@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: false, // by default new user do not have account
   user: null,
   expenses: [],
 };
@@ -12,11 +12,12 @@ export const userSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.isAuthenticated = true;
-      state.user = action.payload;
+      state.user = action.payload.userData; // we are setting user details alao
     },
     logout: (state) => {
       state.isAuthenticated = false;
-      (state.user = {}), (state.expenses = []);
+      state.user = {};
+      state.expenses = [];
     },
     setExpenses: (state, action) => {
       state.expenses = action.payload;

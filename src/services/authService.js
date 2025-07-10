@@ -57,7 +57,7 @@ export class AuthService {
 
   // Gets the currently authenticated user from Appwrite.
   // Returns: the user object if authenticated, otherwise undefined.
-  
+
   //   The user object returned by the getCurrentUser method (which calls account.get() from Appwrite) typically contains the following fields:
 
   // $id: The unique user ID

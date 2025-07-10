@@ -21,7 +21,9 @@ function Login() {
         if (userData) {
           dispatch(storeLogin(userData));
         }
-        navigate("/");
+        navigate("/dashboard");
+      }else{
+        alert("Oops, looks like you do not have account")
       }
     } catch (error) {
       setErrors(error.message);
