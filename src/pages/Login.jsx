@@ -9,11 +9,15 @@ import "./Login.css";
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
-  const [errors, setErrors] = React.useState("");
+  // const [errors, setErrors] = React.useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const login = async (data) => {
-    setErrors("");
+    // setErrors("");
     try {
       const session = await authService.login(data);
       if (session) {
@@ -22,11 +26,11 @@ function Login() {
           dispatch(storeLogin(userData));
         }
         navigate("/dashboard");
-      }else{
-        alert("Oops, looks like you do not have account")
+      } else {
+        alert("Oops, looks like you do not have account");
       }
     } catch (error) {
-      setErrors(error.message);
+      // setErrors(error.message);
     }
   };
 
@@ -34,18 +38,20 @@ function Login() {
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
-        {errors && <p className="error-message">{errors}</p>}
+        
         <form onSubmit={handleSubmit(login)} className="login-form">
           <input
             type="email"
             placeholder="Enter your email"
-            {...register("email", { required: true })}
+            {...register("email", { required: "Enter valid email " })}
           />
+          {errors.email && <p className="error-message">{errors.email.message}</p>}
           <input
             type="password"
             placeholder="Enter your password"
-            {...register("password", { required: true })}
+            {...register("password", { required:"enter valid password" })}
           />
+          {errors.password && <p className="error-message">{errors.password.message}</p>}
           <button type="submit">Sign in</button>
           <p className="signup-text">
             Don't have an account? <Link to="/signup">Sign up</Link>

@@ -9,12 +9,12 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Home from "./components/Home.jsx";
-import Login from "./components/Login.jsx";
-import SignUp from "./components/SignUp.jsx";
-import Expenses from "./components/Expenses.jsx";
-import Profile from "./components/Profile.jsx";
-import Dashboard from "./components/Dashboard.jsx";
+import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import SignUp from "./pages/SignUp.jsx";
+import Expenses from "./pages/Expenses.jsx";
+import Profile from "./pages/Profile.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
