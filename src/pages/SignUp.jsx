@@ -3,13 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { login } from "../store/userSlice";
+import { login, setExpenses } from "../store/userSlice";
+import databaseService from "../services/expense";
 import "./SignUp.css";
 
 function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { register, handleSubmit, watch, formState: {errors} } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
   // const [errors, setErrors] = React.useState("");
 
   const password = watch("password");
@@ -22,6 +28,9 @@ function SignUp() {
         const userData = await authService.getCurrentUser();
         if (userData) {
           dispatch(login(userData));
+          const expenses = await databaseService.getExpenses();
+          const expensesArray = expenses.documents;
+          dispatch(setExpenses(expensesArray))
           navigate("/dashboard");
         }
       }
@@ -34,26 +43,32 @@ function SignUp() {
     <div className="signup-container">
       <div className="signup-box">
         <h2>Create Account</h2>
-        
+
         <form onSubmit={handleSubmit(signUp)} className="signup-form">
           <input
             type="text"
             placeholder="Enter your name..."
             {...register("name", { required: "Enter valid name" })}
           />
-          {errors.name && <p className="error-message">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="error-message">{errors.name.message}</p>
+          )}
           <input
             type="email"
             placeholder="Enter your email..."
             {...register("email", { required: "enter valid email" })}
           />
-          {errors.email && <p className="error-message">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="error-message">{errors.email.message}</p>
+          )}
           <input
             type="password"
             placeholder="Type your password..."
             {...register("password", { required: "enter valid password" })}
           />
-          {errors.password && <p className="error-message">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="error-message">{errors.password.message}</p>
+          )}
           <input
             type="password"
             placeholder="Confirm password..."
@@ -63,7 +78,9 @@ function SignUp() {
                 value === password || "Passwords do not match",
             })}
           />
-          {errors.confirmPassword && <p className="error-message">{errors.confirm-password.message}</p>}
+          {errors.confirmPassword && (
+            <p className="error-message">{errors.confirm - password.message}</p>
+          )}
           <button type="submit">Register</button>
           <p className="login-text">
             Already have an account? <Link to="/login">Sign in</Link>

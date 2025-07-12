@@ -1,0 +1,74 @@
+.add-expense {
+  max-width: 700px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(to right, #2c3e50, #1abc9c);
+}
+
+.add-expense form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-expense input[type="text"],
+.add-expense input[type="number"],
+.add-expense input[type="date"],
+.add-expense input[type="file"],
+.add-expense select,
+.add-expense textarea {
+  margin: 12px 0;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+  resize: none;
+}
+
+.add-expense input:focus,
+.add-expense textarea:focus,
+.add-expense select:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+.add-expense button {
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-expense button:hover {
+  background-color: #43a047;
+}
+
+.form-heading {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+  color: #ffffff; /* Changed from #333 to white */
+}
+
+.form-subtext {
+  text-align: center;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  color: #e0f7fa; /* Soft teal-light for readability */
+}
+
+.add-expense label {
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 5px;
+  color: #f1f1f1; /* Lighter label text for better contrast */
+}

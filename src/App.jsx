@@ -11,13 +11,6 @@ function App() {
   const [loading, setLoading] = React.useState(true);
   const [userFetchError, setUserFetchError] = React.useState("");
 
-  const styles = {
-    divStyle: {
-      marginLeft: "200px" /* same as sidebar width */,
-      minHeight: "100vh",
-      backgroundColor: "#f5f6fa" /* optional background */,
-    },
-  };
 
   useEffect(() => {
     authService
@@ -40,7 +33,7 @@ function App() {
   return loading ? (
     <div>
       <Header />
-      <div className="main-content" style={styles.divStyle}>
+      <div className="main-content">
         {(loading && <div>Loading...</div>) ||
           (userFetchError && <div>{userFetchError}</div>)}
         <Outlet />
@@ -49,7 +42,7 @@ function App() {
   ) : (
     <div>
       <Header />
-      <div className="main-content" style={styles.divStyle}>
+      <div className="main-content">
         {(loading && <div>Loading...</div>) ||
           (userFetchError && <div>{userFetchError}</div>)}
         <Outlet />

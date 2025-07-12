@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-// import authService from "../services/authService";
-// import { login, logout } from "../store/userSlice";
-import { useSelector } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
+import { useSelector} from "react-redux";
+import AddExpense from "../components/AddExpense";
 
 function Expenses() {
   const [msg, setMsg] = useState("");
 
   const isLoggedIn = useSelector((state) => state.isAuthenticated);
+  const expense = useSelector((state) => state.expenses)
 
   
   useEffect(() => {
     if (isLoggedIn) {
       setMsg("Hurray, access to premium content");
+
     } else {
       setMsg("Sorry can show u anything, cause you are not logged in");
     }
@@ -19,14 +21,21 @@ function Expenses() {
   
   return (
     <>
-      <div>
-        <h2>{msg}</h2>
+      <div style={{marginLeft: "10px"}}>
+        <p style={{margin: "0px"}}>{expense.length}</p>
+        {/* <AddExpense /> */}
+
       </div>
     </>
   );
 }
 
 export default Expenses;
+
+
+
+
+
 // moorkh ho tum agar tum abhi bhi nhi samjhe ki usestate func ko call krna outside effect will cause infinite re renders of the expenses page 
 
 //   if(isLoggedIn){

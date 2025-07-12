@@ -20,7 +20,7 @@ export const userSlice = createSlice({
       state.expenses = [];
     },
     setExpenses: (state, action) => {
-      state.expenses = action.payload;
+      state.expenses = action.payload.expensesArray;
     },
     addExpense: (state, action) => {
       state.expenses.push(action.payload);

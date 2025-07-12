@@ -114,8 +114,8 @@ export class DatabaseService {
     }
   }
 
-  // fileId returned by uploadFile method , pass it to getFilePreview method which will provide you the url of the image stored in storage , use this url in addExpense method in receipt_image prop while adding expense 
-  
+  // fileId returned by uploadFile method , pass it to getFilePreview method which will provide you the url of the image stored in storage , use this url in addExpense method in receipt_image prop while adding expense
+
   async uploadFile(file) {
     try {
       const fileId = await this.storage.createFile(

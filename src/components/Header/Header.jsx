@@ -8,7 +8,7 @@ function Header() {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Dashboard", path: "/dashboard" , isAuth: isAuthenticated },
-    { name: "Expenses", path: "/expenses" },
+    { name: "Expenses", path: "/expenses" , isAuth: isAuthenticated },
     { name: "Profile", path: "/profile", isAuth: isAuthenticated },
     { name: "Login", path: "/login", isAuth: !isAuthenticated },
     { name: "Sign Up", path: "/signup", isAuth: !isAuthenticated },
