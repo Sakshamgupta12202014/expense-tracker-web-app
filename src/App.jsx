@@ -11,7 +11,6 @@ function App() {
   const [loading, setLoading] = React.useState(true);
   const [userFetchError, setUserFetchError] = React.useState("");
 
-
   useEffect(() => {
     authService
       .getCurrentUser()

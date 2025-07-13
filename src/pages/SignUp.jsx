@@ -28,9 +28,9 @@ function SignUp() {
         const userData = await authService.getCurrentUser();
         if (userData) {
           dispatch(login(userData));
-          const expenses = await databaseService.getExpenses();
-          const expensesArray = expenses.documents;
-          dispatch(setExpenses(expensesArray))
+          // const expenses = await databaseService.getExpenses();
+          // const expensesArray = expenses.documents;
+          // dispatch(setExpenses(expensesArray));
           navigate("/dashboard");
         }
       }

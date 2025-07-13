@@ -82,6 +82,7 @@ export class AuthService {
       return user;
     } catch (error) {
       console.error("User is not authenticated:", error);
+      return null
     }
   }
 

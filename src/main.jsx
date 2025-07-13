@@ -15,6 +15,7 @@ import SignUp from "./pages/SignUp.jsx";
 import Expenses from "./pages/Expenses.jsx";
 import Profile from "./pages/Profile.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import AddExpense from "./components/AddExpense.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path="logout" element={<h1>Logout Page</h1>} />
       <Route path="signup" element={<SignUp/>} />
       <Route path="dashboard" element={<Dashboard />} />
+      <Route path="addExpense" element={<AddExpense />} />
       <Route path="*" element={<h1>404 Not Found</h1>} />
     </Route>
   )

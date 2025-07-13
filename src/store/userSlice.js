@@ -20,7 +20,9 @@ export const userSlice = createSlice({
       state.expenses = [];
     },
     setExpenses: (state, action) => {
-      state.expenses = action.payload.expensesArray;
+      if (JSON.stringify(state.expenses) !== JSON.stringify(action.payload)) {
+        state.expenses = action.payload; // ✅ only updates if different
+      }
     },
     addExpense: (state, action) => {
       state.expenses.push(action.payload);

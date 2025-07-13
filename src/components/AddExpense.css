@@ -1,8 +1,8 @@
 .add-expense {
-  max-width: 700px;
-  margin: auto;
+  max-width: 1000px;
+  margin: 40px;
   background: #ffffff;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   padding: 30px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   font-family: "Segoe UI", sans-serif;

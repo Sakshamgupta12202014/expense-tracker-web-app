@@ -1,0 +1,77 @@
+.expense-page {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+  font-family: "Segoe UI", sans-serif;
+  color: #fff;
+}
+
+.expense-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.expense-nav h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+}
+
+.create-expense {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-expense:hover {
+  background-color: #43a047;
+}
+
+.expenses {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.expense {
+  background: #ffffff11;
+  border: 1px solid #ffffff33;
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.expense-field {
+  min-width: 130px;
+  margin: 5px 10px;
+  font-size: 0.95rem;
+  color: black;
+  font-weight: 500;
+}
+
+.view-receipt-btn {
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-receipt-btn:hover {
+  background-color: #16a085;
+}

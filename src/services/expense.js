@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Storage } from "appwrite";
+import { Client, Databases, ID, Storage, Query } from "appwrite";
 import config from "../conf/config";
 
 export class DatabaseService {
@@ -15,37 +15,41 @@ export class DatabaseService {
     this.storage = new Storage(this.client);
   }
 
-  async addExpense({
-    expense_Id,
-    amount,
-    category,
-    description,
-    date,
-    payment_method,
-    location,
-    receipt_image,
-    user_Id, // will get this from account.get() method of appwrite authentn service call getCurrentUser() only when the user is logged in
-  }) {
+  async addExpense(
+    {
+      amount,
+      category,
+      description,
+      date,
+      payment_method,
+      location,
+      receipt_image,
+    },
+    user_Id
+  ) {
     try {
+      const uniqueExpenseId = ID.unique();
       const expense = await this.databases.createDocument(
         config.appwriteDatabaseId,
         config.appwriteCollectionId,
-        ID.unique(),
+        uniqueExpenseId,
         {
-          expense_Id,
-          amount,
+          expense_Id: uniqueExpenseId,
+          amount: Number(amount),
           category,
           description,
           date,
           payment_method,
           location,
           receipt_image,
-          user_Id,
+          user_Id: user_Id,
         }
       );
       return expense;
     } catch (error) {
-      console.log("Error in creating expense");
+      console.log("Error in creating expense", error);
+      console.log("Error message:", error.message);
+      console.log("Error response:", error.response);
       return null;
     }
   }
@@ -101,11 +105,15 @@ export class DatabaseService {
 
   // returns
   // An object with a documents array:
-  async getExpenses() {
+  async getExpenses(user_Id) {
     try {
+      if (!user_Id) {
+        throw new Error("user_Id is required to fetch expenses.");
+      }
       const expenses = await this.databases.listDocuments(
         config.appwriteDatabaseId,
-        config.appwriteCollectionId
+        config.appwriteCollectionId,
+        [Query.equal("user_Id", user_Id)]
       );
       return expenses;
     } catch (error) {
@@ -126,7 +134,7 @@ export class DatabaseService {
       return fileId;
     } catch (error) {
       console.log("Error uploading file: ", error);
-      return false;
+      return null;
     }
   }
 
