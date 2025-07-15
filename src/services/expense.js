@@ -24,6 +24,7 @@ export class DatabaseService {
       payment_method,
       location,
       receipt_image,
+      receipt_id,
     },
     user_Id
   ) {
@@ -42,6 +43,7 @@ export class DatabaseService {
           payment_method,
           location,
           receipt_image,
+          receipt_id,
           user_Id: user_Id,
         }
       );
@@ -64,6 +66,7 @@ export class DatabaseService {
       payment_method,
       location,
       receipt_image,
+      receipt_id,
     }
   ) {
     try {
@@ -79,6 +82,7 @@ export class DatabaseService {
           payment_method,
           location,
           receipt_image,
+          receipt_id,
         }
       );
       return expense;
@@ -122,7 +126,7 @@ export class DatabaseService {
     }
   }
 
-  // fileId returned by uploadFile method , pass it to getFilePreview method which will provide you the url of the image stored in storage , use this url in addExpense method in receipt_image prop while adding expense
+  // file object returned by uploadFile method , pass it to getFilePreview method which will provide you the url of the image stored in storage , use this url in addExpense method in receipt_image prop while adding expense
 
   async uploadFile(file) {
     try {
@@ -155,7 +159,7 @@ export class DatabaseService {
   // A URL (string) that can be used to preview the file (e.g., receipt image).
   getFilePreview(fileId) {
     try {
-      return this.storage.getFilePreview(config.appwriteBucketId, fileId);
+      return this.storage.getFileView(config.appwriteBucketId, fileId);
     } catch (error) {
       console.log("Error getting file preview: ", error);
       return null;

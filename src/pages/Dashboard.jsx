@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout as storeLogout } from "../store/userSlice";
 import authService from "../services/authService";
 import "./Dashboard.css";
 
 function Dashboard() {
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
+  const [user, setUser] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(()=>{
+     const fetchUser = async () => {
+      const User = await authService.getCurrentUser();
+      if (!User) {
+        alert("please, log in to add expense");
+        navigate("/login");
+      }
+      setUser(User);
+    };
+    fetchUser();
+
+  },[])
 
   const logout = async () => {
     try {

@@ -25,7 +25,7 @@ function Login() {
         if (userData) {
           dispatch(storeLogin(userData));
           const expenses = await databaseService.getExpenses(userData.$id);
-          console.log("Fetched expenses:", expenses); // Add this
+          console.log("Fetched expenses:", expenses.documents); // Add this
           const expensesArray = expenses.documents;
           dispatch(setExpenses(expensesArray));
         }

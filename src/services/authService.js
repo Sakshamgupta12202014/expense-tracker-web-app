@@ -78,7 +78,7 @@ export class AuthService {
   async getCurrentUser() {
     try {
       const user = await this.account.get();
-      console.log("User is authenticated:", user);
+      // console.log("User is authenticated:", user);
       return user;
     } catch (error) {
       console.error("User is not authenticated:", error);

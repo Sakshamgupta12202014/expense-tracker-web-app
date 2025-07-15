@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { setExpenses } from "../store/userSlice";
 import databaseService from "../services/expense";
+import authService from "../services/authService";
 import "./AddExpense.css";
 
 function AddExpense() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const user_Id = useSelector((state) => state.user ? state.user.$id : null);
+  const user_Id = useSelector((state) => (state.user ? state.user.$id : null));
+  const expenses = useSelector((state) => (state.expenses ? state.expenses : []));
+
+  useEffect(() => {
+    const fetchUser = async ()=> {
+      const user = await authService.getCurrentUser();
+      if(!user){
+        alert("please, log in to add expense");
+        navigate("/login");
+      }
+    }
+
+    fetchUser();
+  }, []);
+
   const [formInputs, setFormInputs] = useState({
     amount: "",
     category: "",
@@ -17,13 +33,19 @@ function AddExpense() {
     payment_method: "",
     location: "",
     receipt_image: "",
+    receipt_id: "",
   });
-
+  
   const handleAdd = async (e) => {
+    if (!user_Id) {
+      navigate("/login");
+      return false;
+    }
     e.preventDefault();
     // validate file
     const file = formInputs?.receipt_image;
-    let receiptUrl = ""
+    let receiptUrl = "";
+    let uploadReceipt = null;
 
     const validTypes = [
       "image/jpeg",
@@ -49,18 +71,30 @@ function AddExpense() {
       return false;
     }
 
-    if(file){
-      const uploadReceiptId = await databaseService.uploadFile(file);
-      receiptUrl = databaseService.getFilePreview(uploadReceiptId);
-      setFormInputs((prevInputs) => ({...prevInputs, receipt_image: receiptUrl}))
+    if (file) {
+      uploadReceipt = await databaseService.uploadFile(file);
+      if(uploadReceipt){
+        console.log("file uploaded : ", uploadReceipt)
+      }
+      receiptUrl = databaseService.getFilePreview(uploadReceipt.$id);
+      console.log("Url of image : ", receiptUrl)
+
     }
-    
-    const res = await databaseService.addExpense({...formInputs, receipt_image: receiptUrl}, user_Id);
-    if(res){
-      alert("hurray!, Your Expense is added successfully")
-      navigate("/expenses")
+
+    const newExpense = {
+      ...formInputs,
+      receipt_image: receiptUrl || "",
+      receipt_id: uploadReceipt ? uploadReceipt.$id : "",
+    }; 
+
+    dispatch(setExpenses([...expenses, newExpense]));
+
+    const res = await databaseService.addExpense(newExpense, user_Id);
+    if (res) {
+      alert("hurray!, Your Expense is added successfully");
+      navigate("/expenses");
     }
-    
+
     console.log("Expense Added Succesfully", formInputs);
     return true;
   };
@@ -75,7 +109,6 @@ function AddExpense() {
     }
 
     setFormInputs((prevInputs) => ({ ...prevInputs, [input]: inputValue }));
-
   };
 
   return (
@@ -184,3 +217,13 @@ function AddExpense() {
 }
 
 export default AddExpense;
+
+      // if(!user_Id){
+      //   alert("You must be logged in to add expense");
+      //   navigate("/login")
+      // }
+      
+            // setFormInputs((prevInputs) => ({
+      //   ...prevInputs,
+      //   receipt_image: receiptUrl,
+      // }));
