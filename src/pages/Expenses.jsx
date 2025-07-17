@@ -3,11 +3,24 @@ import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import "./Expenses.css";
 import databaseService from "../services/expense";
+import AddExpense from "../components/AddExpense";
+import LoadingAnimation from "../components/LoadingAnimation";
 
 function Expenses() {
   const navigate = useNavigate();
   const [user, setuser] = useState({});
   const [expenses, setExpenses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    if (showForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showForm]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,6 +39,7 @@ function Expenses() {
       if (!user.$id) return;
       const res = await databaseService.getExpenses(user.$id);
       setExpenses(res.documents);
+      setLoading(false);
     };
 
     fetchExpenses(); // Call the function
@@ -42,6 +56,8 @@ function Expenses() {
       alert("Please, choose a file !");
       return false;
     }
+    setLoading(true);
+
     let receiptUrl = "";
 
     const validTypes = [
@@ -77,6 +93,7 @@ function Expenses() {
         newExpense
       );
       if (updatedExpense) {
+        setLoading(false);
         alert("Uploaded receipt succesfully");
       }
     } catch (error) {
@@ -125,81 +142,101 @@ function Expenses() {
     }
   };
 
+  if (loading) {
+    return <LoadingAnimation />;
+  }
+
   return (
     <>
-      <div className="expense-page">
-        <div className="expense-nav">
-          <h1>Transaction </h1>
-          <Link to="/addExpense">
-            <button className="create-expense">Create</button>
-          </Link>
+      {showForm && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <AddExpense closeForm={() => setShowForm(false)} />
+          </div>
         </div>
+      )}
+      <div className={`expenses-wrapper ${showForm ? "blurred" : ""}`}>
+        <div className="expense-page">
+          <div className="expense-nav">
+            <h1>Transaction </h1>
+            {/* <Link to="/addExpense"> */}
+            <button
+              className="create-expense"
+              onClick={() => setShowForm(true)}
+            >
+              Create
+            </button>
+            {/* </Link> */}
+          </div>
 
-        <div className="expenses">
-          {expenses &&
-            expenses.map((expense) => {
-              return (
-                <div key={expense.expense_Id} className="expense-card">
-                  <div className="expense-row">
-                    <span className="expense-label">Amount:</span>
-                    <span className="expense-value">{expense.amount} ₹</span>
-                  </div>
-                  <div className="expense-row">
-                    <span className="expense-label">Category:</span>
-                    <span className="expense-value">{expense.category}</span>
-                  </div>
-                  <div className="expense-row">
-                    <span className="expense-label">Description:</span>
-                    <span className="expense-value">{expense.description}</span>
-                  </div>
-                  <div className="expense-row">
-                    <span className="expense-label">Date:</span>
-                    <span className="expense-value">{expense.date}</span>
-                  </div>
-                  <div className="expense-row">
-                    <span className="expense-label">Payment:</span>
-                    <span className="expense-value">
-                      {expense.payment_method}
-                    </span>
-                  </div>
-                  <div className="expense-row">
-                    <span className="expense-label">Location:</span>
-                    <span className="expense-value">{expense.location}</span>
-                  </div>
+          <div className="expenses">
+            {expenses &&
+              expenses.map((expense) => {
+                return (
+                  <div key={expense.expense_Id} className="expense-card">
+                    <div className="expense-row">
+                      <span className="expense-label">Amount:</span>
+                      <span className="expense-value">{expense.amount} ₹</span>
+                    </div>
+                    <div className="expense-row">
+                      <span className="expense-label">Category:</span>
+                      <span className="expense-value">{expense.category}</span>
+                    </div>
+                    <div className="expense-row">
+                      <span className="expense-label">Description:</span>
+                      <span className="expense-value">
+                        {expense.description}
+                      </span>
+                    </div>
+                    <div className="expense-row">
+                      <span className="expense-label">Date:</span>
+                      <span className="expense-value">{expense.date}</span>
+                    </div>
+                    <div className="expense-row">
+                      <span className="expense-label">Payment:</span>
+                      <span className="expense-value">
+                        {expense.payment_method}
+                      </span>
+                    </div>
+                    <div className="expense-row">
+                      <span className="expense-label">Location:</span>
+                      <span className="expense-value">{expense.location}</span>
+                    </div>
 
-                  {expense.receipt_image !== "" ? (
-                    <div className="expense-actions">
-                      <a href={expense.receipt_image} target="_blank">
-                        <button className="view-receipt-btn">
-                          View Receipt
+                    {expense.receipt_image !== "" ? (
+                      <div className="expense-actions">
+                        <a href={expense.receipt_image} target="_blank">
+                          <button className="view-receipt-btn">
+                            View Receipt
+                          </button>
+                        </a>
+                        <button
+                          className="view-receipt-btn"
+                          onClick={() => deleteReceipt(expense)}
+                        >
+                          Delete Receipt
                         </button>
-                      </a>
-                      <button
-                        className="view-receipt-btn"
-                        onClick={() => deleteReceipt(expense)}
-                      >
-                        Delete Receipt
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="expense-actions">
-                      <input
-                        type="file"
-                        name="receipt_image"
-                        className="choose-file"
-                        onChange={(e) => setFile(e.target.files[0])}
-                      />
-                      <button
-                        className="view-receipt-btn"
-                        onClick={() => uploadReceipt(expense)}
-                      >
-                        Upload Receipt
-                      </button>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                      </div>
+                    ) : (
+                      <div className="expense-actions">
+                        <input
+                          type="file"
+                          name="receipt_image"
+                          className="choose-file"
+                          onChange={(e) => setFile(e.target.files[0])}
+                        />
+                        <button
+                          className="view-receipt-btn"
+                          onClick={() => uploadReceipt(expense)}
+                        >
+                          Upload Receipt
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+          </div>
         </div>
       </div>
     </>

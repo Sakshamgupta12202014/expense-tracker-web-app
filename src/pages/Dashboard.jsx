@@ -4,12 +4,14 @@ import { useDispatch } from "react-redux";
 import { logout as storeLogout } from "../store/userSlice";
 import authService from "../services/authService";
 import "./Dashboard.css";
+import LoadingAnimation from "../components/LoadingAnimation";
 
 function Dashboard() {
   // const user = useSelector((state) => state.user);
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
      const fetchUser = async () => {
@@ -19,6 +21,7 @@ function Dashboard() {
         navigate("/login");
       }
       setUser(User);
+      setLoading(false)
     };
     fetchUser();
 
@@ -36,6 +39,12 @@ function Dashboard() {
       console.log("Error in log out ", error);
     }
   };
+
+  if(loading){
+    return(
+      <LoadingAnimation />
+    )
+  }
 
   return (
     <div className="dashboard-container">

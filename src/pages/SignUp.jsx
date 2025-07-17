@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login, setExpenses } from "../store/userSlice";
 import databaseService from "../services/expense";
+import userProfileDatabaseService from "../services/userProfile";
 import "./SignUp.css";
 
 function SignUp() {
@@ -27,6 +28,22 @@ function SignUp() {
       if (response) {
         const userData = await authService.getCurrentUser();
         if (userData) {
+          const profileFields = {
+            username: "username",
+            email: userData.email,
+            profile_pic_url: "",
+            total_expenses: 0,
+            num_transactions: 0,
+            highest_expense_amount: 0,
+            most_used_category: "",
+            monthly_budget: "",
+            profile_pic_url_id: "",
+          };
+          const profile = await userProfileDatabaseService.addProfileData(
+            userData.$id,
+            profileFields
+          );
+          console.log("Profile data added: ", profile);
           dispatch(login(userData));
           // const expenses = await databaseService.getExpenses();
           // const expensesArray = expenses.documents;

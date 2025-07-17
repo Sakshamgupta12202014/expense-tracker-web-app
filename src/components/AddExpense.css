@@ -1,17 +1,46 @@
+/* .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.modal-content {
+  background: #f9f9fb;
+  padding: 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 750px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  max-height: 90vh;
+  overflow-x: hidden;
+} */
+
 .add-expense {
-  max-width: 1000px;
-  margin: 40px;
-  background: #ffffff;
-  /* border-radius: 15px; */
-  padding: 30px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(to right, #2c3e50, #1abc9c);
+  width: 80%;
+  margin: 0;
+  background: #ffffff;;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  margin: auto;
 }
 
 .add-expense form {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  width: 100%;
 }
 
 .add-expense input[type="text"],
@@ -20,55 +49,80 @@
 .add-expense input[type="file"],
 .add-expense select,
 .add-expense textarea {
-  margin: 12px 0;
-  padding: 12px;
+  padding: 12px 14px;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  transition: border-color 0.3s ease;
-  resize: none;
+  background: #f7f9fc;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  resize: vertical;
 }
 
 .add-expense input:focus,
 .add-expense textarea:focus,
 .add-expense select:focus {
   outline: none;
-  border-color: #4caf50;
+  border-color: #4a90e2;
+  background: #fff;
 }
 
 .add-expense button {
-  margin-top: 20px;
-  padding: 12px;
-  background-color: #4caf50;
+  padding: 14px;
+  background-color: #4a90e2;
   color: #fff;
   border: none;
   font-size: 1rem;
+  font-weight: 600;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .add-expense button:hover {
-  background-color: #43a047;
+  background-color: #357ab8;
 }
 
 .form-heading {
   text-align: center;
   font-size: 1.8rem;
-  margin-bottom: 5px;
-  color: #ffffff; /* Changed from #333 to white */
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: bold;
 }
 
 .form-subtext {
   text-align: center;
-  font-size: 0.95rem;
-  margin-bottom: 20px;
-  color: #e0f7fa; /* Soft teal-light for readability */
+  font-size: 1rem;
+  margin-bottom: 24px;
+  color: #666;
 }
 
 .add-expense label {
   font-weight: 600;
-  margin-top: 12px;
-  margin-bottom: 5px;
-  color: #f1f1f1; /* Lighter label text for better contrast */
+  color: #444;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 24px 16px;
+  }
+
+  .add-expense {
+    padding: 20px;
+  }
+
+  .add-expense input,
+  .add-expense select,
+  .add-expense textarea {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .form-heading {
+    font-size: 1.5rem;
+  }
+
+  .form-subtext {
+    font-size: 0.9rem;
+  }
 }

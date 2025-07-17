@@ -102,46 +102,91 @@
 .choose-file{
   width: 100px;
 } */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  overflow-y: auto; /* Add scroll support */
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 750px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  max-height: 100vh; /* So it scrolls if too tall */
+}
+
+
+/* Blur effect */
+.blurred {
+  filter: blur(1px);
+  pointer-events: none;
+  user-select: none;
+}
+
+
+
 
 
 .expense-page {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: auto;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
-
 .expense-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  background: linear-gradient(135deg, #1abc9c, #16a085);
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  color: white;
 }
+
 
 .expense-nav h1 {
-  font-size: 2rem;
-  color: #2c3e50;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
 }
 
+
 .create-expense {
-  background-color: #1abc9c;
-  color: white;
-  padding: 10px 18px;
+  background-color: #ffffff;
+  color: #16a085;
   border: none;
-  border-radius: 6px;
+  padding: 10px 18px;
+  border-radius: 8px;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .create-expense:hover {
-  background-color: #16a085;
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
 }
 
 .expenses {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 

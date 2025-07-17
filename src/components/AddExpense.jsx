@@ -6,21 +6,23 @@ import databaseService from "../services/expense";
 import authService from "../services/authService";
 import "./AddExpense.css";
 
-function AddExpense() {
+function AddExpense({ closeForm }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const user_Id = useSelector((state) => (state.user ? state.user.$id : null));
-  const expenses = useSelector((state) => (state.expenses ? state.expenses : []));
+  const expenses = useSelector((state) =>
+    state.expenses ? state.expenses : []
+  );
 
   useEffect(() => {
-    const fetchUser = async ()=> {
+    const fetchUser = async () => {
       const user = await authService.getCurrentUser();
-      if(!user){
+      if (!user) {
         alert("please, log in to add expense");
         navigate("/login");
       }
-    }
+    };
 
     fetchUser();
   }, []);
@@ -35,7 +37,7 @@ function AddExpense() {
     receipt_image: "",
     receipt_id: "",
   });
-  
+
   const handleAdd = async (e) => {
     if (!user_Id) {
       navigate("/login");
@@ -46,6 +48,11 @@ function AddExpense() {
     const file = formInputs?.receipt_image;
     let receiptUrl = "";
     let uploadReceipt = null;
+
+    if (formInputs.amount < 0) {
+      alert("Invalid amount entered!");
+      return false;
+    }
 
     const validTypes = [
       "image/jpeg",
@@ -73,19 +80,18 @@ function AddExpense() {
 
     if (file) {
       uploadReceipt = await databaseService.uploadFile(file);
-      if(uploadReceipt){
-        console.log("file uploaded : ", uploadReceipt)
+      if (uploadReceipt) {
+        console.log("file uploaded : ", uploadReceipt);
       }
       receiptUrl = databaseService.getFilePreview(uploadReceipt.$id);
-      console.log("Url of image : ", receiptUrl)
-
+      console.log("Url of image : ", receiptUrl);
     }
 
     const newExpense = {
       ...formInputs,
       receipt_image: receiptUrl || "",
       receipt_id: uploadReceipt ? uploadReceipt.$id : "",
-    }; 
+    };
 
     dispatch(setExpenses([...expenses, newExpense]));
 
@@ -211,6 +217,7 @@ function AddExpense() {
         />
 
         <button type="submit">Add Transaction</button>
+        <button onClick={closeForm}>Close</button>
       </form>
     </div>
   );
@@ -218,12 +225,12 @@ function AddExpense() {
 
 export default AddExpense;
 
-      // if(!user_Id){
-      //   alert("You must be logged in to add expense");
-      //   navigate("/login")
-      // }
-      
-            // setFormInputs((prevInputs) => ({
-      //   ...prevInputs,
-      //   receipt_image: receiptUrl,
-      // }));
+// if(!user_Id){
+//   alert("You must be logged in to add expense");
+//   navigate("/login")
+// }
+
+// setFormInputs((prevInputs) => ({
+//   ...prevInputs,
+//   receipt_image: receiptUrl,
+// }));

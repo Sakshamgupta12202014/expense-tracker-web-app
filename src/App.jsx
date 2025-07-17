@@ -5,6 +5,9 @@ import { login, logout } from "./store/userSlice";
 import authService from "./services/authService";
 import Header from "./components/Header/Header";
 import { Outlet } from "react-router-dom";
+import Lottie from "lottie-react";
+import loaderAnimation from "./assets/loader.json";
+import LoadingAnimation from "./components/LoadingAnimation";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +31,13 @@ function App() {
         setLoading(false);
       });
   }, []);
+
+
+  if (loading) {
+    return (
+      <LoadingAnimation />
+    );
+  }
 
   return loading ? (
     <div>
