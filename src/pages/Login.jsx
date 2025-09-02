@@ -1,25 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "../services/authService";
 import databaseService from "../services/expense";
 import { login as storeLogin, setExpenses } from "../store/userSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 import "./Login.css";
+
+import { toast } from "react-toastify";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
-  const login = async (data) => {
-    // setErrors("");
+  const [loginDetails, setLoginDetails] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setLoginDetails({
+      ...loginDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const login = async (e) => {
+    e.preventDefault();
+
+    if (loginDetails.email === "" || loginDetails.password.trim() === "") {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
     try {
-      const session = await authService.login(data);
+      const session = await authService.login({
+        email: loginDetails.email,
+        password: loginDetails.password,
+      });
       if (session) {
         const userData = await authService.getCurrentUser();
         if (userData) {
@@ -29,38 +47,37 @@ function Login() {
           const expensesArray = expenses.documents;
           dispatch(setExpenses(expensesArray));
         }
+        toast.success("Login successful");
         navigate("/dashboard");
       } else {
-        alert("Oops, looks like you do not have account");
+        toast.error("User not found");
       }
     } catch (error) {
-      // setErrors(error.message);
+      toast.error(error.message || "Login failed");
     }
   };
-
 
   return (
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
 
-        <form onSubmit={handleSubmit(login)} className="login-form">
+        <form onSubmit={login} className="login-form">
           <input
             type="email"
+            name="email"
             placeholder="Enter your email"
-            {...register("email", { required: "Enter valid email " })}
+            value={loginDetails.email}
+            onChange={handleChange}
           />
-          {errors.email && (
-            <p className="error-message">{errors.email.message}</p>
-          )}
           <input
             type="password"
+            name="password"
             placeholder="Enter your password"
-            {...register("password", { required: "enter valid password" })}
+            value={loginDetails.password}
+            onChange={handleChange}
           />
-          {errors.password && (
-            <p className="error-message">{errors.password.message}</p>
-          )}
+
           <button type="submit">Sign in</button>
           <p className="signup-text">
             Don't have an account? <Link to="/signup">Sign up</Link>

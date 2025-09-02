@@ -17,15 +17,18 @@ import Profile from "./pages/Profile.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import AddExpense from "./components/AddExpense.jsx";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="/" element={<Home/>} />
+      <Route path="/" element={<Home />} />
       <Route path="expenses" element={<Expenses />} />
-      <Route path="profile" element={<Profile/>} />
-      <Route path="login" element={<Login/>} />
+      <Route path="profile" element={<Profile />} />
+      <Route path="login" element={<Login />} />
       <Route path="logout" element={<h1>Logout Page</h1>} />
-      <Route path="signup" element={<SignUp/>} />
+      <Route path="signup" element={<SignUp />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="addExpense" element={<AddExpense />} />
       <Route path="*" element={<h1>404 Not Found</h1>} />
@@ -36,6 +39,21 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <RouterProvider router={router} />
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick={false}
+      rtl={false}
+      pauseOnFocusLoss={false}
+      draggable
+      pauseOnHover={false}
+      theme="colored"
+      // transition={Bounce}
+      progressClassName="toastProgress"
+      bodyClassName="toastBody"
+    />
   </Provider>
 );
 
