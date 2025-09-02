@@ -37,6 +37,7 @@ export class AuthService {
       }
     } catch (error) {
       console.error("Error creating account: ", error);
+      throw error
     }
   }
 

@@ -72,9 +72,12 @@ function SignUp() {
           toast.success("User registeration successful");
           navigate("/dashboard");
         }
+      } else {
+        toast.error("Account could not be created. Please try again.");
       }
     } catch (error) {
-      toast.error("Registration failed");
+      console.error("Signup error:", error); // helpful in dev
+      toast.error(error.message || "Registration failed");
     }
   };
 
