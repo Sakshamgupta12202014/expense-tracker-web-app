@@ -6,6 +6,9 @@ import databaseService from "../services/expense";
 import authService from "../services/authService";
 import "./AddExpense.css";
 
+import { toast } from "react-toastify";
+import userProfileDatabaseService from "../services/userProfile";
+
 function AddExpense({ closeForm }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -19,7 +22,7 @@ function AddExpense({ closeForm }) {
     const fetchUser = async () => {
       const user = await authService.getCurrentUser();
       if (!user) {
-        alert("please, log in to add expense");
+        toast.info("please, log in to add expense");
         navigate("/login");
       }
     };
@@ -50,7 +53,7 @@ function AddExpense({ closeForm }) {
     let uploadReceipt = null;
 
     if (formInputs.amount < 0) {
-      alert("Invalid amount entered!");
+      toast.error("Invalid amount entered!");
       return false;
     }
 
@@ -66,14 +69,16 @@ function AddExpense({ closeForm }) {
 
     // Type validation
     if (file && !validTypes.includes(file.type)) {
-      alert("Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.");
+      toast.error(
+        "Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed."
+      );
       setFormInputs((prevInputs) => ({ ...prevInputs, receipt_image: null }));
       return false;
     }
 
     // Size validation
     if (file && file.size > maxSize) {
-      alert("File is too large. Max size is 5 MB.");
+      toast.error("File is too large. Max size is 5 MB.");
       setFormInputs((prevInputs) => ({ ...prevInputs, receipt_image: null }));
       return false;
     }
@@ -89,6 +94,7 @@ function AddExpense({ closeForm }) {
 
     const newExpense = {
       ...formInputs,
+      date: formInputs.date ? formInputs.date.split("T")[0] : "",
       receipt_image: receiptUrl || "",
       receipt_id: uploadReceipt ? uploadReceipt.$id : "",
     };
@@ -97,7 +103,7 @@ function AddExpense({ closeForm }) {
 
     const res = await databaseService.addExpense(newExpense, user_Id);
     if (res) {
-      alert("hurray!, Your Expense is added successfully");
+      toast.success("hurray!, Your Expense is added successfully");
       navigate("/expenses");
     }
 

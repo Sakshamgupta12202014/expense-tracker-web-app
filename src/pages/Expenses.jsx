@@ -6,10 +6,14 @@ import databaseService from "../services/expense";
 import AddExpense from "../components/AddExpense";
 import LoadingAnimation from "../components/LoadingAnimation";
 
+import userProfileDatabaseService from "../services/userProfile";
 import { toast } from "react-toastify";
 
 function Expenses() {
   const navigate = useNavigate();
+
+  const [transactions, setTransactions] = useState(0);
+
   const [user, setuser] = useState({});
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,11 +45,22 @@ function Expenses() {
       if (!user.$id) return;
       const res = await databaseService.getExpenses(user.$id);
       setExpenses(res.documents);
+
+      // set num_transactions
+      setTransactions(res.documents.length);
+
+      // profile update
+      const userProfile = await userProfileDatabaseService.updateProfile(user.$id, {
+        num_transactions: transactions,
+      })
+
       setLoading(false);
     };
 
     fetchExpenses(); // Call the function
-  }, [user.$id, expenses]);
+  }, [user.$id, expenses.length]);
+
+
 
   //************UPLOAD FILE***********************************/
 

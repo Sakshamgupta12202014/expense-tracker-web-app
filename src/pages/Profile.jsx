@@ -7,6 +7,7 @@ import LoadingAnimation from "../components/LoadingAnimation";
 
 import { toast } from "react-toastify";
 import defaultAvatar from "../assets/default-profile-image.png";
+import databaseService from "../services/expense";
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -14,6 +15,7 @@ function Profile() {
 
   const fileInputRef = useRef(null);
   const [profileImage, setProfileImage] = useState(null);
+  // const [totalExpense, setTotalExpense] = useState(0);
 
   const navigate = useNavigate();
 
@@ -27,9 +29,56 @@ function Profile() {
       const profile = await userProfileDatabaseService.getProfile(User.$id);
       console.log("User profile:", profile);
       setUser(profile);
-      setLoading(false);
+
+      // calculate total expenses
+      const res = await databaseService.getExpenses(user.user_Id);
+      let total = 0;
+      let maxExpense = 0;
+      let mostUsedCategory = "";
+      let mostUsedCategoryCount = 0;
+      const category = {
+        "food": 0,
+        "transportation": 0,
+        "health": 0,
+        "education": 0,
+        "travel": 0,
+        "bills&emi": 0,
+        "entertainment": 0,
+        "others": 0,
+      };
+
+      if (
+        res.documents &&
+        Array.isArray(res.documents) &&
+        res.documents.length > 0
+      ) {
+        res.documents.forEach((expense) => {
+          if (expense.amount > maxExpense) maxExpense = expense.amount;
+          total += expense.amount;
+
+          category[expense.category] += 1;
+        });
+
+        for (let cat in category) {
+          if(category[cat] > mostUsedCategoryCount){
+            mostUsedCategory = cat;
+            mostUsedCategoryCount = category[cat];
+          }
+        }
+
+        // update profile
+        const updatedProfile = await userProfileDatabaseService.updateProfile(
+          user.user_Id,
+          {
+            total_expenses: total,
+            highest_expense_amount: maxExpense,
+            most_used_category: mostUsedCategory,
+          }
+        );
+      }
     };
     fetchUser();
+    setLoading(false);
   }, []);
 
   const handleUpdateProfilePic = async () => {
@@ -92,8 +141,6 @@ function Profile() {
   };
 
   const handleUpdateUsername = () => {
-    
-
     toast.info("Edit username clicked");
   };
 
@@ -134,11 +181,13 @@ function Profile() {
     <div className="profile-container">
       <div className="profile-header">
         <div className="profile-img-wrapper">
-          <img
-            src={user.profile_pic_url || defaultAvatar}
-            alt="Profile"
-            className="profile-img"
-          />
+          {user && (
+            <img
+              src={user?.profile_pic_url || defaultAvatar}
+              alt="Profile"
+              className="profile-img"
+            />
+          )}
           <input
             type="file"
             id="profile-pic-input"
@@ -155,7 +204,7 @@ function Profile() {
           <button className="edit-btn" onClick={handleUpdateProfilePic}>
             Update Photo
           </button>
-          {user.profile_pic_url !== "" && (
+          {user?.profile_pic_url !== "" && (
             <button className="edit-btn" onClick={handleRemoveProfilePic}>
               Remove Photo
             </button>
