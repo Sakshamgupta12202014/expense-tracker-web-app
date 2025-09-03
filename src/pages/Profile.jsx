@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import userProfileDatabaseService from "../services/userProfile";
@@ -33,26 +32,22 @@ function Profile() {
     fetchUser();
   }, []);
 
-
   const handleUpdateProfilePic = async () => {
-
     if (!profileImage) {
       toast.info("choose a image");
       return;
     }
 
     // delete the previous avatar
-    if(user.profile_pic_url_id){
+    if (user.profile_pic_url_id.trim() !== "") {
       // delete it first
-      const deleted = await userProfileDatabaseService.deleteFile(user.profile_pic_url_id);
-      if (!deleted) {
+      const isDeleted = await handleRemoveProfilePic();
+      if (!isDeleted) {
         toast.error("Failed to delete old avatar");
-        return;
+      } else {
+        toast.success("Old avatar deleted successfully");
       }
-      console.log("Old avatar deleted successfully");
-      setProfileImage(null);
     }
-
 
     // upload to appwrite bucket
     const avatar = await userProfileDatabaseService.uploadProfilePicture(
@@ -97,8 +92,38 @@ function Profile() {
   };
 
   const handleUpdateUsername = () => {
-    // logic to open edit username form/modal
+    
+
     toast.info("Edit username clicked");
+  };
+
+  const handleRemoveProfilePic = async () => {
+    // code the logic to delete the profile pic
+    // delete it first
+    const deleted = await userProfileDatabaseService.deleteFile(
+      user.profile_pic_url_id
+    );
+
+    if (!deleted) {
+      toast.error("Failed to delete profile picture");
+      return;
+    }
+
+    const updatedProfile = await userProfileDatabaseService.updateProfile(
+      user.user_Id,
+      {
+        profile_pic_url: "",
+        profile_pic_url_id: "",
+      }
+    );
+
+    if (updatedProfile) {
+      setUser(updatedProfile);
+      toast.success("Profile picture removed successfully");
+      return true;
+    }
+
+    return false;
   };
 
   if (loading) {
@@ -130,17 +155,22 @@ function Profile() {
           <button className="edit-btn" onClick={handleUpdateProfilePic}>
             Update Photo
           </button>
+          {user.profile_pic_url !== "" && (
+            <button className="edit-btn" onClick={handleRemoveProfilePic}>
+              Remove Photo
+            </button>
+          )}
         </div>
 
         <div className="profile-info">
           <h2>{user?.username}</h2>
           <p>{user?.email}</p>
-          <button
+          {/* <button
             className="edit-btn username-btn"
             onClick={handleUpdateUsername}
           >
             Edit Username
-          </button>
+          </button> */}
         </div>
       </div>
 

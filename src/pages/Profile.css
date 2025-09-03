@@ -133,12 +133,12 @@
 }
 
 .profile-img {
-  width: 110px;
-  height: 110px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid #4dabf7;
-  
+  padding: 3px;
 }
 
 .profile-header h2 {
