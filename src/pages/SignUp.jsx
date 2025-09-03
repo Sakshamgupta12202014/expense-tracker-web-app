@@ -2,16 +2,18 @@ import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/authService";
-// import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login, setExpenses } from "../store/userSlice";
 import databaseService from "../services/expense";
 import userProfileDatabaseService from "../services/userProfile";
 import "./SignUp.css";
 
+import LoadingAnimation from "../components/LoadingAnimation";
 import { toast } from "react-toastify";
 
 function SignUp() {
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,6 +42,7 @@ function SignUp() {
       return;
     }
 
+    setLoading(true);
     try {
       const response = await authService.createAccount({
         email: registerDetails.email,
@@ -49,22 +52,33 @@ function SignUp() {
       if (response) {
         const userData = await authService.getCurrentUser();
         if (userData) {
-          const profileFields = {
-            username: "username",
-            email: userData.email,
-            profile_pic_url: "",
-            total_expenses: 0,
-            num_transactions: 0,
-            highest_expense_amount: 0,
-            most_used_category: "",
-            monthly_budget: "",
-            profile_pic_url_id: "",
-          };
-          const profile = await userProfileDatabaseService.addProfileData(
+          // const profileFields = {
+          //   username: "username",
+          //   email: userData.email,
+          //   profile_pic_url: "",
+          //   total_expenses: 0,
+          //   num_transactions: 0,
+          //   highest_expense_amount: 0,
+          //   most_used_category: "",
+          //   monthly_budget: "",
+          //   profile_pic_url_id: "",
+          // };
+          // set user profile also
+          const userProfile = await userProfileDatabaseService.addProfileData(
             userData.$id,
-            profileFields
+            {
+              email: userData.email,
+              username: userData.name,
+              profile_pic_url: "",
+              total_expenses: 0,
+              num_transactions: 0,
+              highest_expense_amount: 0,
+              most_used_category: "",
+              monthly_budget: "0",
+              profile_pic_url_id: "",
+            }
           );
-          console.log("Profile data added: ", profile);
+          console.log("Profile data added: ", userProfile);
           dispatch(login(userData));
           // const expenses = await databaseService.getExpenses();
           // const expensesArray = expenses.documents;
@@ -78,8 +92,14 @@ function SignUp() {
     } catch (error) {
       console.error("Signup error:", error); // helpful in dev
       toast.error(error.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingAnimation />;
+  }
 
   return (
     <div className="signup-container">

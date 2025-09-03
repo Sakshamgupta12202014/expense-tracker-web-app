@@ -6,6 +6,8 @@ import databaseService from "../services/expense";
 import AddExpense from "../components/AddExpense";
 import LoadingAnimation from "../components/LoadingAnimation";
 
+import { toast } from "react-toastify";
+
 function Expenses() {
   const navigate = useNavigate();
   const [user, setuser] = useState({});
@@ -26,7 +28,7 @@ function Expenses() {
     const fetchUser = async () => {
       const User = await authService.getCurrentUser();
       if (!User) {
-        alert("please, log in to add expense");
+        toast.info("Log in to add expense");
         navigate("/login");
       }
       setuser(User);
@@ -53,7 +55,7 @@ function Expenses() {
   const uploadReceipt = async (expense) => {
     // validate if user has choosen a file
     if (!file) {
-      alert("Please, choose a file !");
+      toast.info("Please, choose a file !");
       return false;
     }
     setLoading(true);
@@ -69,13 +71,16 @@ function Expenses() {
 
     // validate choosen file type
     if (file && !validTypes.includes(file.type)) {
-      alert("Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.");
+      toast.info(
+        "Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed."
+      );
       return false;
     }
 
     const uploadReceipt = await databaseService.uploadFile(file);
     if (uploadReceipt) {
-      console.log("file uploaded : ", uploadReceipt);
+      toast.success("receipt uploaded successfully");
+      // console.log("file uploaded : ", uploadReceipt);
     }
     receiptUrl = databaseService.getFilePreview(uploadReceipt.$id);
     console.log("Url of image : ", receiptUrl);
@@ -94,10 +99,11 @@ function Expenses() {
       );
       if (updatedExpense) {
         setLoading(false);
-        alert("Uploaded receipt succesfully");
+        toast.success("Uploaded receipt succesfully");
       }
     } catch (error) {
-      console.log("Error in uploading receipt: ", error);
+      toast.error("Something went wrong while uploading receipt", error);
+      // console.log("Error in uploading receipt: ", error);
     }
   };
 
@@ -127,17 +133,21 @@ function Expenses() {
                 newExpense
               );
               if (updatedExpense) {
-                alert("Note: receipt deleted !!");
+                toast.info("Note: receipt deleted !!");
               }
             } catch (error) {
-              console.log("Error in updating expense: ", error);
+              toast.error("Something went wrong while updating expense");
+              // console.log("Error in updating expense: ", error);
             }
           }
         } else {
-          alert("Cannot delete current expense's receipt image(No receipt_id)");
+          toast.info(
+            "Cannot delete current expense's receipt image(No receipt_id)"
+          );
         }
       } catch (error) {
-        console.log("Error in deleting file from storage: ", error);
+        toast.error("Somethig went wrong while deleting file", error);
+        // console.log("Error in deleting file from storage: ", error);
       }
     }
   };

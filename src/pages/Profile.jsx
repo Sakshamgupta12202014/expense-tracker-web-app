@@ -1,36 +1,104 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 import userProfileDatabaseService from "../services/userProfile";
 import "./Profile.css";
 import LoadingAnimation from "../components/LoadingAnimation";
 
+import { toast } from "react-toastify";
+import defaultAvatar from "../assets/default-profile-image.png";
+
 function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const fileInputRef = useRef(null);
+  const [profileImage, setProfileImage] = useState(null);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchUser = async () => {
       const User = await authService.getCurrentUser();
       if (!User) {
-        alert("please, log in to add expense");
+        toast.error("please, log in to add expense");
         navigate("/login");
       }
       const profile = await userProfileDatabaseService.getProfile(User.$id);
+      console.log("User profile:", profile);
       setUser(profile);
       setLoading(false);
     };
     fetchUser();
   }, []);
 
+
   const handleUpdateProfilePic = async () => {
-    
+
+    if (!profileImage) {
+      toast.info("choose a image");
+      return;
+    }
+
+    // delete the previous avatar
+    if(user.profile_pic_url_id){
+      // delete it first
+      const deleted = await userProfileDatabaseService.deleteFile(user.profile_pic_url_id);
+      if (!deleted) {
+        toast.error("Failed to delete old avatar");
+        return;
+      }
+      console.log("Old avatar deleted successfully");
+      setProfileImage(null);
+    }
+
+
+    // upload to appwrite bucket
+    const avatar = await userProfileDatabaseService.uploadProfilePicture(
+      profileImage
+    );
+
+    if (!avatar) {
+      toast.error("Failed to upload image");
+      return;
+    }
+
+    toast.success("avatar uploaded successfully");
+
+    const profile_pic_id = avatar.$id;
+    const avatarUrl = userProfileDatabaseService.getProfilePicture(avatar.$id);
+    if (!avatarUrl) {
+      toast.error("Failed to get avatar url");
+      return;
+    }
+
+    // console.log("avatarUrl", avatarUrl);
+
+    // save the avatarUrl and its id in database
+    const updatedProfile = await userProfileDatabaseService.updateProfile(
+      user.user_Id,
+      {
+        profile_pic_url: avatarUrl,
+        profile_pic_url_id: profile_pic_id,
+      }
+    );
+
+    if (!updatedProfile) {
+      toast.error("Failed to update user profile");
+      return;
+    }
+
+    // console.log("updated user profile", updatedProfile);
+    setUser(updatedProfile);
+    fileInputRef.current.value = "";
+    setProfileImage(null);
+    return;
   };
 
   const handleUpdateUsername = () => {
     // logic to open edit username form/modal
-    alert("Edit username clicked");
+    toast.info("Edit username clicked");
   };
 
   if (loading) {
@@ -42,10 +110,23 @@ function Profile() {
       <div className="profile-header">
         <div className="profile-img-wrapper">
           <img
-            src={user?.profile_pic_url}
+            src={user.profile_pic_url || defaultAvatar}
             alt="Profile"
             className="profile-img"
           />
+          <input
+            type="file"
+            id="profile-pic-input"
+            ref={fileInputRef}
+            onChange={(e) => {
+              toast.info("Image selected");
+              setProfileImage(e.target.files[0]);
+            }}
+          />
+          <label htmlFor="profile-pic-input" className="profile-pic-label">
+            Choose Photo
+          </label>
+
           <button className="edit-btn" onClick={handleUpdateProfilePic}>
             Update Photo
           </button>

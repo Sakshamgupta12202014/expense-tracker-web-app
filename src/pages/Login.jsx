@@ -7,9 +7,13 @@ import { Link, useNavigate } from "react-router-dom";
 // import { useForm } from "react-hook-form";
 import "./Login.css";
 
+import LoadingAnimation from "../components/LoadingAnimation";
+
 import { toast } from "react-toastify";
 
 function Login() {
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -33,6 +37,7 @@ function Login() {
       return;
     }
 
+    setLoading(true);
     try {
       const session = await authService.login({
         email: loginDetails.email,
@@ -42,11 +47,13 @@ function Login() {
         const userData = await authService.getCurrentUser();
         if (userData) {
           dispatch(storeLogin(userData));
+
           const expenses = await databaseService.getExpenses(userData.$id);
           console.log("Fetched expenses:", expenses.documents); // Add this
           const expensesArray = expenses.documents;
           dispatch(setExpenses(expensesArray));
         }
+
         toast.success("Login successful");
         navigate("/dashboard");
       } else {
@@ -54,8 +61,14 @@ function Login() {
       }
     } catch (error) {
       toast.error(error.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingAnimation />;
+  }
 
   return (
     <div className="login-container">

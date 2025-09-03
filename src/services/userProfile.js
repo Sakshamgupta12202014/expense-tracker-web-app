@@ -34,7 +34,7 @@ export class UserProfileDatabaseService {
       const profile = await this.databases.createDocument(
         config.appwriteDatabaseId,
         config.appwriteUserProfileCollectionId,
-        uniqueProfileId,
+        user_Id,
         {
           user_Id: user_Id,
           username,
@@ -104,6 +104,7 @@ export class UserProfileDatabaseService {
         ID.unique(),
         file
       );
+      console.log(fileObj);
       return fileObj;
     } catch (error) {
       console.log("Error uploading file: ", error);
@@ -121,6 +122,7 @@ export class UserProfileDatabaseService {
 
       // If the user profile exists, return the first document
       if (response.total > 0) {
+        // console.log("getProfile: ", response.documents[0]);
         return response.documents[0];
       } else {
         console.log("Profile not found for user:", user_Id);

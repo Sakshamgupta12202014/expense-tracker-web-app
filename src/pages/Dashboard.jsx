@@ -6,6 +6,8 @@ import authService from "../services/authService";
 import "./Dashboard.css";
 import LoadingAnimation from "../components/LoadingAnimation";
 
+import { toast } from "react-toastify";
+
 function Dashboard() {
   // const user = useSelector((state) => state.user);
   const [user, setUser] = useState({});
@@ -17,7 +19,7 @@ function Dashboard() {
      const fetchUser = async () => {
       const User = await authService.getCurrentUser();
       if (!User) {
-        alert("please, log in to add expense");
+        toast.error("please, log in to add expense");
         navigate("/login");
       }
       setUser(User);
@@ -32,10 +34,11 @@ function Dashboard() {
       const res = await authService.logout();
       if (res) {
         dispatch(storeLogout());
-        alert("Successfully logged out!");
+        toast.success("Successfully logged out!");
         navigate("/");
       }
     } catch (error) {
+      toast.error("Failed to log out");
       console.log("Error in log out ", error);
     }
   };
