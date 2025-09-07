@@ -9,7 +9,20 @@ import { toast } from "react-toastify";
 import defaultAvatar from "../assets/default-profile-image.png";
 import databaseService from "../services/expense";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-regular-svg-icons";
+import Modals from "../components/Modals";
+
 function Profile() {
+  // modals requires
+  const [showModal, setShowModal] = useState(false);
+  const [heading, setHeading] = useState("");
+  const [description, setDescription] = useState("");
+  const [btnText1, setBtnText1] = useState("");
+  const [btnText2, setBtnText2] = useState("");
+  const [btnText3, setBtnText3] = useState("");
+  const [cloudImageUrl, setCloudImageUrl] = useState("");
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,22 +42,24 @@ function Profile() {
       const profile = await userProfileDatabaseService.getProfile(User.$id);
       console.log("User profile:", profile);
       setUser(profile);
+      setCloudImageUrl(profile.profile_pic_url);
+      const user_Id = profile.user_Id;
 
       // calculate total expenses
-      const res = await databaseService.getExpenses(user.user_Id);
+      const res = await databaseService.getExpenses(user_Id);
       let total = 0;
       let maxExpense = 0;
       let mostUsedCategory = "";
       let mostUsedCategoryCount = 0;
       const category = {
-        "food": 0,
-        "transportation": 0,
-        "health": 0,
-        "education": 0,
-        "travel": 0,
+        food: 0,
+        transportation: 0,
+        health: 0,
+        education: 0,
+        travel: 0,
         "bills&emi": 0,
-        "entertainment": 0,
-        "others": 0,
+        entertainment: 0,
+        others: 0,
       };
 
       if (
@@ -60,7 +75,7 @@ function Profile() {
         });
 
         for (let cat in category) {
-          if(category[cat] > mostUsedCategoryCount){
+          if (category[cat] > mostUsedCategoryCount) {
             mostUsedCategory = cat;
             mostUsedCategoryCount = category[cat];
           }
@@ -81,11 +96,11 @@ function Profile() {
     setLoading(false);
   }, []);
 
-  const handleUpdateProfilePic = async () => {
-    if (!profileImage) {
-      toast.info("choose a image");
-      return;
-    }
+  const handleUpdateProfilePic = async (file) => {
+    // if (!profileImage) {
+    //   toast.info("choose an image");
+    //   return;
+    // }
 
     // delete the previous avatar
     if (user.profile_pic_url_id.trim() !== "") {
@@ -99,9 +114,7 @@ function Profile() {
     }
 
     // upload to appwrite bucket
-    const avatar = await userProfileDatabaseService.uploadProfilePicture(
-      profileImage
-    );
+    const avatar = await userProfileDatabaseService.uploadProfilePicture(file);
 
     if (!avatar) {
       toast.error("Failed to upload image");
@@ -118,7 +131,7 @@ function Profile() {
     }
 
     // console.log("avatarUrl", avatarUrl);
-
+    setCloudImageUrl(avatarUrl);
     // save the avatarUrl and its id in database
     const updatedProfile = await userProfileDatabaseService.updateProfile(
       user.user_Id,
@@ -136,6 +149,7 @@ function Profile() {
     // console.log("updated user profile", updatedProfile);
     setUser(updatedProfile);
     fileInputRef.current.value = "";
+    setShowModal(false);
     setProfileImage(null);
     return;
   };
@@ -166,6 +180,8 @@ function Profile() {
 
     if (updatedProfile) {
       setUser(updatedProfile);
+      setCloudImageUrl("");
+      setShowModal(false);
       toast.success("Profile picture removed successfully");
       return true;
     }
@@ -173,79 +189,116 @@ function Profile() {
     return false;
   };
 
+  const handleProfileImageBoxClick = async () => {
+    if (cloudImageUrl) {
+      setShowModal(true);
+      setBtnText1((prev) => "Remove image");
+      setBtnText2((prev) => "View image");
+      setBtnText3((prev) => "Change image");
+
+      return;
+    }
+
+    fileInputRef.current?.click();
+  };
+
   if (loading) {
     return <LoadingAnimation />;
   }
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <div className="profile-img-wrapper">
-          {user && (
+    <>
+      {showModal && (
+        <Modals
+          heading="Profile Photo"
+          buttonText1={btnText1}
+          onButtonClick1={handleRemoveProfilePic}
+          // buttonText2={btnText2}
+          buttonText3={btnText3}
+          onButtonClick3={() => fileInputRef.current?.click()}
+          imageUrl={cloudImageUrl}
+          closeForm={() => setShowModal(false)}
+        />
+      )}
+      <div className="profile-container">
+        <div className="profile-header">
+          <div className="box" onClick={handleProfileImageBoxClick}>
             <img
               src={user?.profile_pic_url || defaultAvatar}
               alt="Profile"
               className="profile-img"
             />
-          )}
+            <div className="overlay">
+              <FontAwesomeIcon
+                icon={faEdit}
+                style={{ color: "black", height: "50px" }}
+              />
+            </div>
+          </div>
+
           <input
             type="file"
             id="profile-pic-input"
             ref={fileInputRef}
-            onChange={(e) => {
-              toast.info("Image selected");
-              setProfileImage(e.target.files[0]);
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+
+              setProfileImage(file);
+              await handleUpdateProfilePic(file);
+
+              e.target.value = ""; // allow re-selecting the same file again
             }}
           />
-          <label htmlFor="profile-pic-input" className="profile-pic-label">
+          {/* <label htmlFor="profile-pic-input" className="profile-pic-label">
             Choose Photo
-          </label>
+          </label> */}
 
-          <button className="edit-btn" onClick={handleUpdateProfilePic}>
+          {/* <button className="edit-btn" onClick={handleUpdateProfilePic}>
             Update Photo
-          </button>
-          {user?.profile_pic_url !== "" && (
+          </button> */}
+          {/* {user?.profile_pic_url !== "" && (
             <button className="edit-btn" onClick={handleRemoveProfilePic}>
               Remove Photo
             </button>
-          )}
-        </div>
+          )} */}
 
-        <div className="profile-info">
-          <h2>{user?.username}</h2>
-          <p>{user?.email}</p>
-          {/* <button
+          <div className="profile-info">
+            <h2>{user?.username}</h2>
+            <p>{user?.email}</p>
+            {/* <button
             className="edit-btn username-btn"
             onClick={handleUpdateUsername}
           >
             Edit Username
           </button> */}
+          </div>
         </div>
-      </div>
 
-      <div className="profile-stats">
-        <div className="stat-box">
-          <span className="label">Total Expenses</span>
-          <span className="value">₹{user?.total_expenses}</span>
-        </div>
-        <div className="stat-box">
-          <span className="label">Transactions</span>
-          <span className="value">{user?.num_transactions}</span>
-        </div>
-        <div className="stat-box">
-          <span className="label">Highest Expense</span>
-          <span className="value">₹{user?.highest_expense_amount}</span>
-        </div>
-        <div className="stat-box">
-          <span className="label">Most Used Category</span>
-          <span className="value">{user?.most_used_category}</span>
-        </div>
-        <div className="stat-box">
-          <span className="label">Monthly Budget</span>
-          <span className="value">₹{user?.monthly_budget}</span>
+        <div className="profile-stats">
+          <div className="stat-box">
+            <span className="label">Total Expenses</span>
+            <span className="value">₹{user?.total_expenses}</span>
+          </div>
+          <div className="stat-box">
+            <span className="label">Transactions</span>
+            <span className="value">{user?.num_transactions}</span>
+          </div>
+          <div className="stat-box">
+            <span className="label">Highest Expense</span>
+            <span className="value">₹{user?.highest_expense_amount}</span>
+          </div>
+          <div className="stat-box">
+            <span className="label">Most Used Category</span>
+            <span className="value">{user?.most_used_category || "None"}</span>
+          </div>
+          <div className="stat-box">
+            <span className="label">Monthly Budget</span>
+            <span className="value">₹{user?.monthly_budget}</span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

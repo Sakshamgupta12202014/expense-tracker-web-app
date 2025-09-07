@@ -8,26 +8,30 @@ import LoadingAnimation from "../components/LoadingAnimation";
 
 import { toast } from "react-toastify";
 
+import Modals from "../components/Modals.jsx";
+
 function Dashboard() {
   // const user = useSelector((state) => state.user);
+
+  const [showModal, setShowModal] = useState(false);
+
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
-  useEffect(()=>{
-     const fetchUser = async () => {
+  useEffect(() => {
+    const fetchUser = async () => {
       const User = await authService.getCurrentUser();
       if (!User) {
         toast.error("please, log in to add expense");
         navigate("/login");
       }
       setUser(User);
-      setLoading(false)
+      setLoading(false);
     };
     fetchUser();
-
-  },[])
+  }, []);
 
   const logout = async () => {
     try {
@@ -43,25 +47,37 @@ function Dashboard() {
     }
   };
 
-  if(loading){
-    return(
-      <LoadingAnimation />
-    )
+  if (loading) {
+    return <LoadingAnimation />;
   }
 
   return (
-    <div className="dashboard-container">
-      <nav className="dashboard-nav">
-        <ul className="dashboard-nav-list">
-          <li className="dashboard-user">Hi, {user?.name}</li>
-          <li>
-            <button className="logout-button" onClick={logout}>
-              Logout
-            </button>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <>
+      {showModal && (
+        <Modals
+          heading="Logout"
+          description="Do you want to log out?"
+          buttonText1="Yes"
+          onButtonClick1={logout}
+          closeForm={() => setShowModal(false)}
+        />
+      )}
+      <div className="dashboard-container">
+        <nav className="dashboard-nav">
+          <ul className="dashboard-nav-list">
+            <li className="dashboard-user">Hi, {user?.name}</li>
+            <li>
+              <button
+                className="logout-button"
+                onClick={() => setShowModal(true)}
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </>
   );
 }
 

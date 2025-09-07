@@ -1,123 +1,11 @@
-/* Profile.css
-
-.profile-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(to right, #2c3e50, #1abc9c);
-}
-
-.profile-card {
-  background-color: #ffffff;
-  padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  width: 100%;
-  color: #2c3e50;
-}
-
-.profile-name {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-  color: #1abc9c;
-  font-weight: bold;
-}
-
-.profile-card p {
-  font-size: 1rem;
-  margin: 0.5rem 0;
-  line-height: 1.5;
-}
-
-.profile-card strong {
-  color: #34495e;
-} */
-
-/* Adjust based on your sidebar width */
-/* .profile-container {
-  margin-left: 240px;
-  padding: 40px;
-  background: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
-  min-height: 100vh;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-} */
-
-/* Header section: image + name/email */
-/* .profile-header {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  margin-bottom: 50px;
-} */
-
-/* .profile-img {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 4px solid #fff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-} */
-
-/* Name and email */
-/* .profile-header h2 {
-  margin: 0;
-  font-size: 28px;
-  color: #333; */
-/* } */
-
-/* .profile-header p {
-  margin-top: 5px;
-  color: #666;
-  font-size: 16px;
-} */
-
-/* Stats grid */
-/* .profile-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 30px;
-} */
-
-/* .stat-box {
-  background-color: rgba(255, 255, 255, 0.85);
-  padding: 25px 30px;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
-}
-
-.stat-box:hover {
-  transform: translateY(-5px);
-}
-
-.label {
-  display: block;
-  font-size: 14px;
-  color: #777;
-  margin-bottom: 8px;
-}
-
-.value {
-  font-size: 22px;
-  font-weight: bold;
-  color: #333;
-} */
-
 
 /* Profile.css */
-
-  /* Profile.css */
 
 .profile-container {
   padding: 2.5rem;
   min-height: 100vh;
   background: linear-gradient(135deg, #f0f4ff, #e0f7fa);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #222;
 }
 
@@ -132,6 +20,33 @@
   margin-bottom: 2.5rem;
 }
 
+
+.box {
+   position: relative; /*Needed so overlay is positioned inside this div */
+  display: inline-block;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.overlay {
+  position: absolute; /* Overlay will sit on top of the box */
+  top: 0; /* Start from top */
+  border-radius: 50%;
+  left: 0; /* Start from left */
+  width: 100%; /* Cover full width of the parent */
+  height: 100%; /* Cover full height of the parent */
+  background: rgba(0, 0, 0, 0.5); /* Black with 50% transparency */
+  opacity: 0; /* Start hidden */
+  transition: opacity 0.3s ease; /* Smooth fade-in */
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.box:hover .overlay {
+  opacity: 1;
+}
+
 .profile-img {
   width: 130px;
   height: 130px;
@@ -139,6 +54,7 @@
   object-fit: cover;
   border: 4px solid #4dabf7;
   padding: 3px;
+  display: block; /*removes extra space below image*/
 }
 
 .profile-header h2 {
@@ -179,7 +95,6 @@
 .profile-pic-label:hover {
   background-color: #1a73e8;
 }
-
 
 .stat-box {
   background: #ffffff;
@@ -223,13 +138,6 @@
 }
 .stat-box:nth-child(5) {
   border-left-color: #42a5f5;
-}
-
-.profile-img-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .edit-btn {
