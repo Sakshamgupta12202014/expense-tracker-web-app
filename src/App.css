@@ -1,4 +1,4 @@
-body{
+body,html{
   background-color:white;
   padding: 0px;
   margin: 0px;
@@ -8,4 +8,5 @@ body{
     margin-left: 200px; /* same as sidebar width */
     min-height: 100vh;
     background-color: #f5f6fa; /* optional background */
+    max-width: calc(100vw - 200px);
 }

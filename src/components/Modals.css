@@ -21,10 +21,10 @@
   padding: 24px;
   position: relative;
   display: flex;
+  background-color: white;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
   animation: zoomIn 0.3s ease-in-out;
   overflow-y: auto;
   max-width: 500px;

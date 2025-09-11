@@ -102,7 +102,7 @@
 .choose-file{
   width: 100px;
 } */
-.modal-overlay {
+.modal-overlay-1 {
   position: fixed;
   top: 0;
   left: 0;
@@ -118,7 +118,7 @@
   padding: 20px;
 }
 
-.modal-content {
+.modal-content-1 {
   background: white;
   padding: 30px 24px;
   border-radius: 12px;

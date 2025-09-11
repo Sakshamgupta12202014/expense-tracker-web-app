@@ -16,8 +16,6 @@ import Modals from "../components/Modals";
 function Profile() {
   // modals requires
   const [showModal, setShowModal] = useState(false);
-  const [heading, setHeading] = useState("");
-  const [description, setDescription] = useState("");
   const [btnText1, setBtnText1] = useState("");
   const [btnText2, setBtnText2] = useState("");
   const [btnText3, setBtnText3] = useState("");
@@ -83,25 +81,24 @@ function Profile() {
 
         // update profile
         const updatedProfile = await userProfileDatabaseService.updateProfile(
-          user.user_Id,
+          user?.user_Id,
           {
             total_expenses: total,
             highest_expense_amount: maxExpense,
             most_used_category: mostUsedCategory,
           }
         );
+
+        if (updatedProfile) {
+          toast.success("profile updated");
+        }
       }
+      setLoading(false);
     };
     fetchUser();
-    setLoading(false);
   }, []);
 
   const handleUpdateProfilePic = async (file) => {
-    // if (!profileImage) {
-    //   toast.info("choose an image");
-    //   return;
-    // }
-
     // delete the previous avatar
     if (user.profile_pic_url_id.trim() !== "") {
       // delete it first
@@ -130,7 +127,6 @@ function Profile() {
       return;
     }
 
-    // console.log("avatarUrl", avatarUrl);
     setCloudImageUrl(avatarUrl);
     // save the avatarUrl and its id in database
     const updatedProfile = await userProfileDatabaseService.updateProfile(
@@ -146,7 +142,6 @@ function Profile() {
       return;
     }
 
-    // console.log("updated user profile", updatedProfile);
     setUser(updatedProfile);
     fileInputRef.current.value = "";
     setShowModal(false);
@@ -160,7 +155,6 @@ function Profile() {
 
   const handleRemoveProfilePic = async () => {
     // code the logic to delete the profile pic
-    // delete it first
     const deleted = await userProfileDatabaseService.deleteFile(
       user.profile_pic_url_id
     );
@@ -195,7 +189,6 @@ function Profile() {
       setBtnText1((prev) => "Remove image");
       setBtnText2((prev) => "View image");
       setBtnText3((prev) => "Change image");
-
       return;
     }
 

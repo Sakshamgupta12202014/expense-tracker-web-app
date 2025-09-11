@@ -43,8 +43,6 @@ function App() {
     <div>
       <Header />
       <div className="main-content">
-        {(loading && <div>Loading...</div>) ||
-          (userFetchError && <div>{userFetchError}</div>)}
         <Outlet />
       </div>
     </div>
@@ -52,8 +50,6 @@ function App() {
     <div>
       <Header />
       <div className="main-content">
-        {(loading && <div>Loading...</div>) ||
-          (userFetchError && <div>{userFetchError}</div>)}
         <Outlet />
       </div>
     </div>

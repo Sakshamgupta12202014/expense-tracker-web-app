@@ -174,8 +174,8 @@ function Expenses() {
   return (
     <>
       {showForm && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className="modal-overlay-1">
+          <div className="modal-content-1">
             <AddExpense closeForm={() => setShowForm(false)} />
           </div>
         </div>
