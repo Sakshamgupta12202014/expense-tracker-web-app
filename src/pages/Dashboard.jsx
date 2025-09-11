@@ -181,7 +181,7 @@ function Dashboard() {
             </div>
             <div className="info">
               <span className="label">Most used category</span>
-              <span className="value">{userProfile?.most_used_category}</span>
+              <span className="value">{userProfile?.most_used_category || "None"}</span>
             </div>
             <div className="info">
               <span className="label">Highest expense</span>
