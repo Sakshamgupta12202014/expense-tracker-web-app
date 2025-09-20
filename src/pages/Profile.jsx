@@ -25,6 +25,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
 
   const fileInputRef = useRef(null);
+  
   const [profileImage, setProfileImage] = useState(null);
   // const [totalExpense, setTotalExpense] = useState(0);
 
@@ -81,7 +82,7 @@ function Profile() {
 
         // update profile
         const updatedProfile = await userProfileDatabaseService.updateProfile(
-          user?.user_Id,
+          user_Id,
           {
             total_expenses: total,
             highest_expense_amount: maxExpense,
@@ -187,7 +188,7 @@ function Profile() {
     if (cloudImageUrl) {
       setShowModal(true);
       setBtnText1((prev) => "Remove image");
-      setBtnText2((prev) => "View image");
+      // setBtnText2((prev) => "View image");
       setBtnText3((prev) => "Change image");
       return;
     }
