@@ -81,6 +81,7 @@
 .nav-link .nav-item-name {
   /* No specific style needed here unless you want to override font-weight/size for text only */
   padding-left: 5px;
+  font-size: 1.1rem;
 }
 
 /* Target screens larger than 1024px (desktops) */
