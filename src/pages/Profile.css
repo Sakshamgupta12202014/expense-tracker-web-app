@@ -1,6 +1,6 @@
 /* Profile.css */
 
-.profile-container {
+/* .profile-container {
   padding: 2.5rem;
   min-height: 100vh;
   background: linear-gradient(135deg, #f0f4ff, #e0f7fa);
@@ -17,45 +17,45 @@
   border-radius: 18px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   margin-bottom: 2.5rem;
-}
+} */
 
-.box {
-  position: relative; /*Needed so overlay is positioned inside this div */
+/* .box {
+  position: relative; /*Needed so overlay is positioned inside this div 
   display: inline-block;
   border-radius: 50%;
   cursor: pointer;
-}
+} */
 
-.overlay {
-  position: absolute; /* Overlay will sit on top of the box */
-  top: 0; /* Start from top */
+/* .overlay {
+  position: absolute; 
+  top: 0; 
   border-radius: 50%;
-  left: 0; /* Start from left */
-  width: 100%; /* Cover full width of the parent */
-  height: 100%; /* Cover full height of the parent */
-  background: rgba(0, 0, 0, 0.5); /* Black with 50% transparency */
-  opacity: 0; /* Start hidden */
-  transition: opacity 0.3s ease; /* Smooth fade-in */
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease; 
   align-items: center;
   justify-content: center;
   display: flex;
-}
+} */
 
-.box:hover .overlay {
+/* .box:hover .overlay {
   opacity: 1;
-}
+} */
 
-.profile-img {
+/* .profile-img {
   width: 130px;
   height: 130px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid #4dabf7;
   padding: 3px;
-  display: block; /*removes extra space below image*/
-}
+  display: block; /*removes extra space below image
+} */
 
-.profile-header h2 {
+/* .profile-header h2 {
   margin: 0;
   font-size: 2rem;
   color: #212529;
@@ -71,13 +71,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.8rem;
-}
+} */
 
-#profile-pic-input {
-  display: none; /* hide the default file input */
-}
+/* #profile-pic-input {
+  display: none; // hide the default file input 
+} */
 
-.profile-pic-label {
+/* .profile-pic-label {
   margin-top: 10px;
   padding: 6px 12px;
   background-color: #4dabf7;
@@ -119,10 +119,10 @@
   font-size: 1.6rem;
   font-weight: 600;
   color: #333;
-}
+} */
 
 /* Color variations for stat boxes (optional but looks better) */
-.stat-box:nth-child(1) {
+/* .stat-box:nth-child(1) {
   border-left-color: #00c9a7;
 }
 .stat-box:nth-child(2) {
@@ -169,5 +169,201 @@
     border-radius: 18px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     margin-bottom: 2.5rem;
+  }
+} */
+
+
+.profile-container {
+  padding: 2rem 2.5rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background-color: #ffffffcc;
+  padding: 1.6rem 2rem;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.box {
+  position: relative;
+  display: inline-block;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.box:hover {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  background: rgba(44, 62, 80, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box:hover .overlay {
+  opacity: 1;
+}
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4dabf7;
+  padding: 3px;
+  display: block;
+  box-shadow: 0 3px 8px rgba(77, 171, 247, 0.6);
+}
+
+.profile-header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #34495e;
+  font-weight: 600;
+}
+
+.profile-header p {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+  word-break: break-word;
+}
+
+#profile-pic-input {
+  display: none;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-box {
+  background: #ffffffcc;
+  border-left: 6px solid #4dabf7;
+  padding: 1.2rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.07);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: default;
+}
+
+.stat-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.11);
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5f6368;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 0.5rem;
+  opacity: 0.82;
+  transition: opacity 0.3s ease;
+}
+
+.value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c3e50;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.stat-box:nth-child(1) {
+  border-left-color: #00c9a7;
+}
+.stat-box:nth-child(2) {
+  border-left-color: #f9a825;
+}
+.stat-box:nth-child(3) {
+  border-left-color: #e53935;
+}
+.stat-box:nth-child(4) {
+  border-left-color: #7e57c2;
+}
+.stat-box:nth-child(5) {
+  border-left-color: #42a5f5;
+}
+
+@media (max-width: 900px) {
+  .profile-header {
+    justify-content: center;
+  }
+  .profile-header h2 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+  .profile-header p {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 1rem 1rem;
+  }
+
+  .profile-header {
+    padding: 1rem 1rem;
+    gap: 1rem;
+  }
+
+  .profile-img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .profile-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .profile-header p {
+    font-size: 0.8rem;
+  }
+
+  .profile-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stat-box {
+    padding: 1rem 1.2rem;
+    border-left-width: 5px;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .value {
+    font-size: 1.1rem;
   }
 }
